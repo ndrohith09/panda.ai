@@ -1,0 +1,15 @@
+{
+  "logs": {
+    "log_id": "98224ac6-c16a-4a3a-a7b7-4e199d728a64",
+    "notify_team": true,
+    "team_members": [],
+    "logs": [],
+    "pipeline_id": "b30f642e-a4c5-4f33-9a3d-b4e00d97892f"
+  },
+  "pipeline": {
+    "id": "b30f642e-a4c5-4f33-9a3d-b4e00d97892f",
+    "name": "Linux",
+    "connection": "http://localhost:8000/docs#/default/create_pipeline_pipeline_create_post",
+    "status": "connected"
+  }
+}

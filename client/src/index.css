@@ -1,0 +1,51 @@
+/* @import url("https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap"); */
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: "Inter", sans-serif;
+    background-color: #ffffff;
+  }
+}
+
+.menu-img {
+  height: 22px;
+}
+
+.main-bottom {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  max-width: 900px;
+  padding: 0 20px;
+  margin: auto;
+}
+
+/** model conent **/
+.ant-modal-content {
+  @apply bg-white border border-borderColor !important;
+}
+
+.ant-result-title,
+.ant-result-subtitle {
+  @apply text-textColor !important;
+}
+
+::-webkit-scrollbar {
+  @apply w-2.5;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-borderColor rounded;
+}
+
+::-webkit-scrollbar-track {
+  @apply rounded;
+}
+
+.ant-switch.ant-switch-checked {
+  @apply bg-green-500;
+}
