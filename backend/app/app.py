@@ -34,8 +34,7 @@ async def shutdown_event():
     await app.state.db.close()
 
 app = FastAPI(
-    on_startup=[startup_event, ],
-    # on_startup=[startup_event, start_polling],
+    on_startup=[startup_event, start_polling],
     on_shutdown=[shutdown_event],
 )
 
@@ -142,7 +141,7 @@ conf = ConnectionConfig(
      
 
 @app.post("/start-polling/" ,
-        #   dependencies=[Depends(JWTBearer())]
+         dependencies=[Depends(JWTBearer())]
           )
 async def start_polling(url: str, interval: int = 5, background_tasks: BackgroundTasks = None):
     """
@@ -155,7 +154,7 @@ async def start_polling(url: str, interval: int = 5, background_tasks: Backgroun
 
 
 @app.get("/pipeline",
-        #   dependencies=[Depends(JWTBearer())]
+        dependencies=[Depends(JWTBearer())]
          )
 async def get_pipeline():
     query = "SELECT * FROM pipeline"
@@ -170,7 +169,7 @@ async def get_pipeline():
 
 
 @app.post("/pipeline/create",
-        #   dependencies=[Depends(JWTBearer())]
+        dependencies=[Depends(JWTBearer())]
           )
 async def create_pipeline(pipeline : PostSchema = Body(...)): 
     create_pipeline_query = """
@@ -185,7 +184,7 @@ async def create_pipeline(pipeline : PostSchema = Body(...)):
         RETURNING log_id;
     """
     try:
-      status = "connected" # need a red panda connection check fuction
+      status = "connected" 
       async with app.state.db.acquire() as connection:
           pipeline_id = await connection.fetchval(create_pipeline_query, pipeline.name, pipeline.connection, status)  
           print("pipeline_id", pipeline_id)
@@ -197,7 +196,7 @@ async def create_pipeline(pipeline : PostSchema = Body(...)):
 
 
 @app.get("/logs/{pipeline_id}",
-        #   dependencies=[Depends(JWTBearer())]
+        dependencies=[Depends(JWTBearer())]
          )
 async def get_logs(pipeline_id : str): 
     logs_query = f"SELECT * FROM logs WHERE pipeline_id = '{pipeline_id}'::uuid;" 
@@ -223,7 +222,7 @@ async def get_logs(pipeline_id : str):
 
 
 @app.post("/logs/create",
-        #   dependencies=[Depends(JWTBearer())]
+      dependencies=[Depends(JWTBearer())]
         )
 async def create_logs(logs : LogRequestSchema = Body(...)):  
           
@@ -257,7 +256,7 @@ async def create_logs(logs : LogRequestSchema = Body(...)):
 
     try : 
         ai_response = await invoke_llm(logs.error_log, connection_type)
-        # ai_response = re.sub(r'\bf', '', ai_response)
+        ai_response = re.sub(r'\bf', '', ai_response)
         print("ai_response", ai_response)
     except Exception as e :
         log = { 
@@ -315,7 +314,7 @@ async def create_logs(logs : LogRequestSchema = Body(...)):
         
 
 @app.post("/logs/team",
-        #   dependencies=[Depends(JWTBearer())]
+        dependencies=[Depends(JWTBearer())]
           )
 async def add_teams(teams : TeamSchema = Body(...)): 
     
