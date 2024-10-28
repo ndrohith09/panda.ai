@@ -36,7 +36,7 @@ class EmailSchema(BaseModel):
    content : Any 
 
 class LLMSchema(BaseModel):
-    error : str # Sample bytes: SnVuIDE2IDA0OjE2OjE3IGNvbWJvIHN1KHBhbV91bml4KVsyNTU0OF06IHNlc3Npb24gb3BlbmVkIGZvciB1c2VyIG5ld3MgYnkgKHVpZD0wKQ
+    error : str 
     errortype : str
 
 
