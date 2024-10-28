@@ -1,0 +1,28 @@
+http:
+  address: 0.0.0.0:4196
+input:
+  label: "logging"
+  aws_sqs:
+    url: ""
+    region: "us-east-1"
+    credentials:
+      profile: "default"
+pipeline:
+  processors:
+    - branch:
+        request_map: 'root = {"error_log": content().string(), "log_id": "08e36096-2039-4132-adab-8f8b9073bf6d", "pipeline_id":"3e5d0e42-dc97-4c85-a65f-bbfed1fb6e0e"}'
+        processors:
+          - http:
+              url: "http://127.0.0.1:8000/logs/create"
+              verb: POST
+              headers:
+                Content-Type: application/json
+              timeout: 60s
+              retries: 0
+        result_map: 'root = this.message'
+
+redpanda:
+  seed_brokers:
+    - 127.0.0.1:9093
+  logs_topic: application.logs
+  logs_level: info
