@@ -1,7 +1,7 @@
 import asyncio
 from httpx import AsyncClient 
 
-# TODO: check func
+
 async def poll_endpoint(url: str, interval: int):
     async with AsyncClient() as client:
         while True:
