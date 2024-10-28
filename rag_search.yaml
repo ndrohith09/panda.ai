@@ -1,0 +1,31 @@
+input:
+  http_server:
+    path: /search
+    allowed_verbs: [ GET ]
+    sync_response:
+      headers:
+        Content-Type: application/json
+pipeline:
+  processors:
+    - branch:
+        processors:
+        - label: "embedding_extraction" 
+          ollama_embeddings:
+            model: llama3.2
+            text: |
+              Retrieve Event Id and Event Template from this error log.
+              ${!@query}
+        result_map: 'root.embedding = this'
+    - branch:
+        processors:
+        - label: "sql_fetch_similar_logs"
+          sql_raw:
+            driver: "postgres"
+            dsn: "${PG_CONNECTION_STRING}"
+            query: "SELECT page_content FROM logs_vector WHERE source = $2 ORDER BY embedding <-> $1 LIMIT 4"
+            args_mapping: "[ this.embedding.vector(), @source ]"
+        result_map: |
+          root.query_result = this.map_each(row -> row.page_content)
+    - mapping: 'root.response = this.query_result'
+    - sync_response: {}
+    - mapping: 'root = deleted()'

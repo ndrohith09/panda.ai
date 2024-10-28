@@ -14,18 +14,20 @@ import asyncpg, re
 from schema import PostSchema, EmailSchema, LLMSchema,UserLoginSchema, LogRequestSchema, UserSchema, TeamSchema
 from fastapi import FastAPI, BackgroundTasks
 from polling import poll_endpoint
-
+from dotenv import load_dotenv
+import os
 
 from auth.auth_bearer import JWTBearer
 from auth.auth_handler import get_password_hash , signJWT , verify_password
 
+load_dotenv()
 
 async def startup_event():
     app.state.db = await asyncpg.create_pool(
-        host='localhost',
-        database='redpanda',
-        user='postgres',
-        password='postgres'
+        host=os.getenv('PG_HOST'),
+        database=os.getenv('PG_DATABASE'),
+        user=os.getenv('PG_USER'),
+        password=os.getenv('PG_PWD')
     )
     await create_table_if_not_exists(app.state.db)
     print("connected", app.state.db)
